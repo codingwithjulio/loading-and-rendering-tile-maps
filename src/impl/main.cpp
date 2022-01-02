@@ -12,7 +12,7 @@ bool Init(Game *game)
 
   if (!LoadGameConfiguration(game)) { return false; }
 
-  if (!InitGraphics(&game->window, &game->renderer, &game->screen)) { return false; }
+  if (!InitGraphics(&game->window, &game->renderer, &game->screen, &game->tileset)) { return false; }
 
   game->currentLevelMap = LoadLevelMap(GAME_MAIN_LEVEL_FILENAME);
 

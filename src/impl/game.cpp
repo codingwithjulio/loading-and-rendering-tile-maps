@@ -11,7 +11,12 @@ void Run(Game *game)
   {
     Clear(game->renderer);
 
-    //TODO: Draw the tilemap
+    DrawLevelMap(
+      game->renderer,
+      game->tileset,
+      game->currentLevelMap,
+      game->screen.resolutionScale
+    );
 
     CheckEvents(game);
 
@@ -91,7 +96,7 @@ bool LoadGameConfiguration(Game *game)
     {
       game->screen.height = value;
     }
-    else if (param == "RESOLUITON_SCALE")
+    else if (param == "RESOLUTION_SCALE")
     {
       game->screen.resolutionScale = value;
     }

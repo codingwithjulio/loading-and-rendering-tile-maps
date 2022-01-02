@@ -30,4 +30,6 @@ struct Game
   Screen screen;
 
   std::vector<Tile> currentLevelMap;
+
+  SDL_Texture *tileset;
 };
