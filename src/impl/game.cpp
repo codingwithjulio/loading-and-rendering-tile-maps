@@ -61,6 +61,16 @@ void CheckEvents(Game *game)
         {
           game->state.showOutlines = !game->state.showOutlines;
         }
+        else if (event.key.keysym.scancode == SDL_SCANCODE_1)
+        {
+          SDL_DestroyTexture(game->tileset); // Destroy the current tileset texture
+          game->tileset = LoadTilesetTexture(game->renderer, GAME_MAIN_TILESET_FILENAME);
+        }
+        else if (event.key.keysym.scancode == SDL_SCANCODE_2)
+        {
+          SDL_DestroyTexture(game->tileset); // Destroy the current tileset texture
+          game->tileset = LoadTilesetTexture(game->renderer, GAME_TILESET_WITH_ARTWORK_FILENAME);
+        }
         break;
       }
       case SDL_QUIT:
