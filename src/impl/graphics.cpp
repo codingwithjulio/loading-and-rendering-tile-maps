@@ -20,3 +20,8 @@ bool InitGraphics(SDL_Window **window, SDL_Renderer **renderer)
 
   return true;
 }
+
+void Clear(SDL_Renderer *renderer)
+{
+  SDL_RenderClear(renderer);
+}

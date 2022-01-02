@@ -4,3 +4,4 @@
 #include "globals.h"
 
 bool InitGraphics(SDL_Window **window, SDL_Renderer **renderer);
+void Clear(SDL_Renderer *renderer);
