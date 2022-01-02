@@ -1,9 +1,9 @@
 SRC_DIR = src
 BUILD_DIR = build/debug
 CC = g++
-SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
+SRC_FILES = $(wildcard $(SRC_DIR)/impl/*.cpp)
 OBJ_NAME = play
-INCLUDE_PATHS = -Iinclude
+INCLUDE_PATHS = -Iinclude -Isrc/headers
 LIBRARY_PATHS = -L/usr/lib
 COMPILER_FLAGS = -std=c++17 -Wall -O0 -g
 LINKER_FLAGS = -lSDL2 -lSDL2_image
