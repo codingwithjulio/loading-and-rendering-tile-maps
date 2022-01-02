@@ -1,11 +1,13 @@
 #include <iostream>
-#include <SDL2/SDL.h>
+
+#include "structs.h"
+
+Game game;
 
 // Graphics
 const int WINDOW_WIDTH = 512;
 const int WINDOW_HEIGHT = 284;
-SDL_Window* g_main_window;
-SDL_Renderer* g_main_renderer;
+
 
 // Colors
 namespace Colors {
@@ -19,14 +21,14 @@ static void ClearScreen(SDL_Renderer* renderer)
   SDL_RenderClear(renderer);
 }
 
-static bool Init()
+bool Init(Game *game)
 {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
     std::cout << "SDL_Init failed with error: " << SDL_GetError() << std::endl;
     return EXIT_FAILURE;
   }
 
-  g_main_window = SDL_CreateWindow(
+  game->g_main_window = SDL_CreateWindow(
     "SDL2 Window Starter",
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
@@ -35,35 +37,38 @@ static bool Init()
     SDL_WINDOW_OPENGL
   );
 
-  if (g_main_window == nullptr) {
+  if (game->g_main_window == nullptr) {
     std::cout << "Unable to crete the main window. Erro: " << SDL_GetError() << std::endl;
     SDL_Quit();
     return EXIT_FAILURE;
   }
 
-  g_main_renderer = SDL_CreateRenderer(g_main_window, -1, SDL_RENDERER_PRESENTVSYNC);
+  game->g_main_renderer = SDL_CreateRenderer(game->g_main_window, -1, SDL_RENDERER_PRESENTVSYNC);
 
   return true;
 }
 
-void Shutdown()
+void Shutdown(Game *game)
 {
-  if (g_main_window != nullptr) {
-    SDL_DestroyWindow(g_main_window);
-    g_main_window = nullptr;
+  if (game->g_main_window != nullptr) {
+    SDL_DestroyWindow(game->g_main_window);
+    game->g_main_window = nullptr;
   }
 
-  if (g_main_renderer != nullptr) {
-    SDL_DestroyRenderer(g_main_renderer);
-    g_main_renderer = nullptr;
+  if (game->g_main_renderer != nullptr) {
+    SDL_DestroyRenderer(game->g_main_renderer);
+    game->g_main_renderer = nullptr;
   }
 
   SDL_Quit();
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-  if (Init() == false) { Shutdown(); }
+  if (!Init(&game))
+  {
+    Shutdown(&game);
+  }
 
   // Draw loop
   SDL_Event event;
@@ -71,7 +76,7 @@ int main()
 
   while(running)
   {
-    ClearScreen(g_main_renderer);
+    ClearScreen(game.g_main_renderer);
 
     // Check and process I/O events
     if (SDL_PollEvent(&event)) {
@@ -92,9 +97,9 @@ int main()
     }
 
     // Update the screen with the content rendered in the background
-    SDL_RenderPresent(g_main_renderer);
+    SDL_RenderPresent(game.g_main_renderer);
   }
 
-  Shutdown();
+  Shutdown(&game);
   return EXIT_SUCCESS;
 }
