@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "sdl_routines.h"
 #include "structs.h"
 
 Game game;
@@ -23,12 +24,12 @@ static void ClearScreen(SDL_Renderer* renderer)
 
 bool Init(Game *game)
 {
-  if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-    std::cout << "SDL_Init failed with error: " << SDL_GetError() << std::endl;
-    return EXIT_FAILURE;
-  }
 
-  game->g_main_window = SDL_CreateWindow(
+  if (!InitSDL()) { return false; }
+
+  // if (!InitGraphics(&game->window, &game->renderer)) { return false; }
+
+  game->window = SDL_CreateWindow(
     "SDL2 Window Starter",
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
@@ -37,37 +38,22 @@ bool Init(Game *game)
     SDL_WINDOW_OPENGL
   );
 
-  if (game->g_main_window == nullptr) {
+  if (game->window == nullptr) {
     std::cout << "Unable to crete the main window. Erro: " << SDL_GetError() << std::endl;
     SDL_Quit();
     return EXIT_FAILURE;
   }
 
-  game->g_main_renderer = SDL_CreateRenderer(game->g_main_window, -1, SDL_RENDERER_PRESENTVSYNC);
+  game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_PRESENTVSYNC);
 
   return true;
-}
-
-void Shutdown(Game *game)
-{
-  if (game->g_main_window != nullptr) {
-    SDL_DestroyWindow(game->g_main_window);
-    game->g_main_window = nullptr;
-  }
-
-  if (game->g_main_renderer != nullptr) {
-    SDL_DestroyRenderer(game->g_main_renderer);
-    game->g_main_renderer = nullptr;
-  }
-
-  SDL_Quit();
 }
 
 int main(int argc, char *argv[])
 {
   if (!Init(&game))
   {
-    Shutdown(&game);
+    FreeSDLResources(game.window, game.renderer);
   }
 
   // Draw loop
@@ -76,7 +62,7 @@ int main(int argc, char *argv[])
 
   while(running)
   {
-    ClearScreen(game.g_main_renderer);
+    ClearScreen(game.renderer);
 
     // Check and process I/O events
     if (SDL_PollEvent(&event)) {
@@ -97,9 +83,9 @@ int main(int argc, char *argv[])
     }
 
     // Update the screen with the content rendered in the background
-    SDL_RenderPresent(game.g_main_renderer);
+    SDL_RenderPresent(game.renderer);
   }
 
-  Shutdown(&game);
+  FreeSDLResources(game.window, game.renderer);
   return EXIT_SUCCESS;
 }
