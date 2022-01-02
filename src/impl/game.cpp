@@ -27,7 +27,25 @@ void CheckEvents(Game *game)
     switch (event.type) {
       case SDL_KEYDOWN:
       {
-        game->state.running = event.key.keysym.scancode != SDL_SCANCODE_ESCAPE;
+        if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+        {
+          game->state.running = false;
+        }
+        else if (event.key.keysym.scancode == SDL_SCANCODE_R) // Reload
+        {
+          SDL_Log("####################### RELOAD! ###################");
+
+          LoadGameConfiguration(game);
+
+          game->currentLevelMap = LoadLevelMap(GAME_MAIN_LEVEL_FILENAME);
+
+          // Resize the window in case it changes.
+          SDL_SetWindowSize(
+            game->window,
+            game->screen.width,
+            game->screen.height
+          );
+        }
         break;
       }
       case SDL_QUIT:
@@ -87,4 +105,52 @@ bool LoadGameConfiguration(Game *game)
   SDL_Log("    SCREEN_HEIGHT : %d", game->screen.height);
 
   return true;
+}
+
+std::vector<Tile> LoadLevelMap(const char *filename)
+{
+  int mapTile, mapX, mapY, mapW, mapH;
+  std::vector<Tile> tempTileMap;
+
+  std::ifstream in(filename);
+
+  if (!in.is_open())
+  {
+    SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to load the level map from %s: %s", filename, strerror(errno));
+  }
+
+  in >> mapW;
+  in >> mapH;
+  in >> mapX;
+  in >> mapY;
+
+  SDL_Log("Level dimensions are: W: %d, H: %d, X: %d, Y: %d", mapW, mapH, mapX, mapY);
+
+  // Iterate over the level map and load the tiles into the vector of tiles
+  for (int i = 0; i < mapH; i++) // For each line of the level map
+  {
+    for (int j = 0; j < mapW; j++) // Go column by column
+    {
+      in >> mapTile; // Read the tile definition
+
+      if (mapTile != 0) // For tiles defined as 0, nothing will be rendered.
+      {
+        Tile tile;
+        tile.source.x = (mapTile-1) * TILE_SIZE;
+        tile.source.y = 0;
+        tile.source.w = TILE_SIZE;
+        tile.source.h = TILE_SIZE;
+
+        tile.dest.x = (j * TILE_SIZE) + mapX;
+        tile.dest.y = (i * TILE_SIZE) + mapY;
+        tile.dest.w = TILE_SIZE;
+        tile.dest.h = TILE_SIZE;
+
+        tempTileMap.push_back(tile);
+      }
+    }
+  }
+
+  in.close();
+  return tempTileMap;
 }

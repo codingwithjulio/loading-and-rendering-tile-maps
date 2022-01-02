@@ -14,6 +14,8 @@ bool Init(Game *game)
 
   if (!InitGraphics(&game->window, &game->renderer, &game->screen)) { return false; }
 
+  game->currentLevelMap = LoadLevelMap(GAME_MAIN_LEVEL_FILENAME);
+
   return true;
 }
 
