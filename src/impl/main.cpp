@@ -2,13 +2,9 @@
 
 #include "sdl_routines.h"
 #include "structs.h"
+#include "graphics.h"
 
 Game game;
-
-// Graphics
-const int WINDOW_WIDTH = 512;
-const int WINDOW_HEIGHT = 284;
-
 
 // Colors
 namespace Colors {
@@ -27,24 +23,7 @@ bool Init(Game *game)
 
   if (!InitSDL()) { return false; }
 
-  // if (!InitGraphics(&game->window, &game->renderer)) { return false; }
-
-  game->window = SDL_CreateWindow(
-    "SDL2 Window Starter",
-    SDL_WINDOWPOS_CENTERED,
-    SDL_WINDOWPOS_CENTERED,
-    WINDOW_WIDTH,
-    WINDOW_HEIGHT,
-    SDL_WINDOW_OPENGL
-  );
-
-  if (game->window == nullptr) {
-    std::cout << "Unable to crete the main window. Erro: " << SDL_GetError() << std::endl;
-    SDL_Quit();
-    return EXIT_FAILURE;
-  }
-
-  game->renderer = SDL_CreateRenderer(game->window, -1, SDL_RENDERER_PRESENTVSYNC);
+  if (!InitGraphics(&game->window, &game->renderer)) { return false; }
 
   return true;
 }
