@@ -10,7 +10,9 @@ bool Init(Game *game)
 
   if (!InitSDL()) { return false; }
 
-  if (!InitGraphics(&game->window, &game->renderer)) { return false; }
+  if (!LoadGameConfiguration(game)) { return false; }
+
+  if (!InitGraphics(&game->window, &game->renderer, &game->screen)) { return false; }
 
   return true;
 }

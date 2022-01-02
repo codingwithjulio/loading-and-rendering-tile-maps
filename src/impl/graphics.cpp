@@ -1,13 +1,14 @@
+#include "structs.h"
 #include "graphics.h"
 
-bool InitGraphics(SDL_Window **window, SDL_Renderer **renderer)
+bool InitGraphics(SDL_Window **window, SDL_Renderer **renderer, Screen *screen)
 {
   *window = SDL_CreateWindow(
     "SDL2 Window Starter",
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
-    SCREEN_WIDTH,
-    SCREEN_HEIGHT,
+    screen->width,
+    screen->height,
     SDL_WINDOW_OPENGL
   );
 
