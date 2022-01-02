@@ -1,6 +1,8 @@
-# SDL2-Starter Linux
+# Loading and Rendering Tile Maps
 
-A SDL2 project template ready to be used with VSCode on Linux.
+A SDL2 example project where tiles as loaded and rendered on the screen.
+
+This project was developed in Linux. For other platforms some adjustments on the Makefile might be necessary. The code itself should compile in Linux, Windows, or Mac without changes.
 
 ## Pre-requisites
 
