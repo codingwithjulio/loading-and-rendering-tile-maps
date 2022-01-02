@@ -15,7 +15,9 @@ void Run(Game *game)
       game->renderer,
       game->tileset,
       game->currentLevelMap,
-      game->screen.resolutionScale
+      game->screen.resolutionScale,
+      game->state.renderTiles,
+      game->state.showOutlines
     );
 
     CheckEvents(game);
@@ -50,6 +52,14 @@ void CheckEvents(Game *game)
             game->screen.width,
             game->screen.height
           );
+        }
+        else if (event.key.keysym.scancode == SDL_SCANCODE_X)
+        {
+          game->state.renderTiles = !game->state.renderTiles;
+        }
+        else if (event.key.keysym.scancode == SDL_SCANCODE_G)
+        {
+          game->state.showOutlines = !game->state.showOutlines;
         }
         break;
       }

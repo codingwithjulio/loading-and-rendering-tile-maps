@@ -55,16 +55,16 @@ SDL_Texture* LoadTilesetTexture(SDL_Renderer *renderer, const char *filename)
   return texture;
 }
 
-void DrawLevelMap(SDL_Renderer *renderer, SDL_Texture *tileset, std::vector<Tile> levelMap, float spriteScale)
+void DrawLevelMap(SDL_Renderer *renderer, SDL_Texture *tileset, std::vector<Tile> levelMap, float spriteScale, bool renderTiles, bool showOutline)
 {
   for (size_t i = 0; i < levelMap.size(); i++) // Iterate over all the tiles in our map
   {
     // Draw each tile
-    Draw(renderer, tileset, &levelMap[i], spriteScale);
+    Draw(renderer, tileset, &levelMap[i], spriteScale, renderTiles, showOutline);
   }
 }
 
-void Draw(SDL_Renderer *renderer, SDL_Texture *tileset, Tile *tile, float spriteScale)
+void Draw(SDL_Renderer *renderer, SDL_Texture *tileset, Tile *tile, float spriteScale, bool renderTile, bool showOutline)
 {
   SDL_Rect scaledTargetRect;
   scaledTargetRect.x = tile->dest.x * spriteScale;
@@ -72,8 +72,18 @@ void Draw(SDL_Renderer *renderer, SDL_Texture *tileset, Tile *tile, float sprite
   scaledTargetRect.w = TILE_SIZE * spriteScale;
   scaledTargetRect.h = TILE_SIZE * spriteScale;
 
-  // Render a copy of the source tile into the scaledTargetRect
-  SDL_RenderCopy(renderer, tileset, &tile->source, &scaledTargetRect);
+  if (renderTile)
+  {
+    // Render a copy of the source tile into the scaledTargetRect
+    SDL_RenderCopy(renderer, tileset, &tile->source, &scaledTargetRect);
+  }
+
+  if (showOutline)
+  {
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set color to white.
+    SDL_RenderDrawRect(renderer, &scaledTargetRect); // Draw the outlined rect.
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Set color to black again.
+  }
 }
 
 

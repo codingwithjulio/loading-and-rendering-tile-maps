@@ -19,6 +19,8 @@ struct Screen
 struct GameState
 {
   bool running;
+  bool renderTiles = false;
+  bool showOutlines = false;
 };
 
 struct Game
