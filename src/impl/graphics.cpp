@@ -56,12 +56,20 @@ SDL_Texture* LoadTilesetTexture(SDL_Renderer *renderer, const char *filename)
 }
 
 void DrawLevelMap(SDL_Renderer *renderer, SDL_Texture *tileset, std::vector<Tile> levelMap, float spriteScale, bool renderTiles, bool showOutline)
-{
-  for (size_t i = 0; i < levelMap.size(); i++) // Iterate over all the tiles in our map
+{ 
+  std::vector<Tile>::iterator itr = levelMap.begin();
+
+  while (itr != levelMap.end())
   {
-    // Draw each tile
-    Draw(renderer, tileset, &levelMap[i], spriteScale, renderTiles, showOutline);
+    Draw(renderer, tileset, &*itr, spriteScale, renderTiles, showOutline);
+    itr++;
   }
+
+//  Alternative way using a traditional foor loop 
+//  for (size_t i = 0; i < levelMap.size(); i++) // Iterate over all the tiles in our map
+//  {
+//    Draw(renderer, tileset, &levelMap[i], spriteScale, renderTiles, showOutline);
+//  }
 }
 
 void Draw(SDL_Renderer *renderer, SDL_Texture *tileset, Tile *tile, float spriteScale, bool renderTile, bool showOutline)
